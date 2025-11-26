@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Stock Screener</title>
+    <meta charset="utf-8">
+    <link rel="icon" type="image/x-icon" href="../static/images/align-bottom-svgrepo-com.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="../static/stock.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/stock_style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <style>
+        .backtest-button {
+            border: none;
+            background: #0055cc;
+        }
+
+        .CardSection {
+            border-radius: 10px;
+            border: none;
+            min-width: 15rem;
+            margin: 1rem;
+        }
+
+        .stockFigure svg {
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <div class="container">
+        <h2 class="mt-4">Trade time price screener</h2>
+        <form method="POST" action="/queryPrices" class="form">
+            <div class="row">
+                <div class="col-1 d-flex justify-content-center">
+                    <h2 class="mt-2">➊</h2>
+                </div>
+                <div class="col-11">
+                    <h6 class="mb-0">
+                        Please pick a valid US trade date<br>
+                        請選擇一個美股交易日
+                    </h6>
+                    <input type="date" id="trade_date" name="trade_date" class="form-control">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 d-flex justify-content-center">
+                    <h2 class="mt-2">➋</h2>
+                </div>
+                <div class="col-11 d-flex align-items-center">
+                    <h6 class="mb-0">
+                        Type a ticker<br>
+                        輸入一個標的物
+                    </h6>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 d-flex justify-content-center"></div>
+                <div class="col-11">
+                    <input type="text" id="ticker" name="ticker" class="form-control" value="{{ data.ticker if data.ticker else '' }}">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 d-flex justify-content-center">
+                    <h2 class="mt-2">➌</h2>
+                </div>
+                <div class="col d-flex justify-content-end align-items-center">
+                    <button type="submit" id="query" name="query" class="btn btn-primary backtest-button">
+                        Query
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 d-flex justify-content-center"></div>
+                <div class="col-11">
+                    <div class="card-deck">
+                        <div class="card CardSection">
+                            <div class="card-body">
+                                <h5 class="card-title">1m</h5>
+                                <div class="stockFigure">
+                                    {{ data.figure_1m | safe }}
+                                </div>
+                                <div class="card-text">
+                                    <div class="row">
+                                        <div class="col text-left">
+                                            Buy time
+                                        </div>
+                                        <div class="col text-right">
+                                            {{ data['1m_buy_time'] }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-left">
+                                            Buy price
+                                        </div>
+                                        <div class="col text-right">
+                                            ${{ data['1m_buy_price'] }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-left">
+                                            Sell time
+                                        </div>
+                                        <div class="col text-right">
+                                            {{ data['1m_sell_time'] }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-left">
+                                            Sell price
+                                        </div>
+                                        <div class="col text-right">
+                                            ${{ data['1m_sell_price'] }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card CardSection">
+                            <div class="card-body">
+                                <h5 class="card-title">5m</h5>
+                                <div class="stockFigure">
+                                    {{ data.figure_5m | safe }}
+                                </div>
+                                <div class="card-text">
+                                    <div class="row">
+                                        <div class="col text-left">
+                                            Buy time
+                                        </div>
+                                        <div class="col text-right">
+                                            {{ data['5m_buy_time'] }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-left">
+                                            Buy price
+                                        </div>
+                                        <div class="col text-right">
+                                            ${{ data['5m_buy_price'] }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-left">
+                                            Sell time
+                                        </div>
+                                        <div class="col text-right">
+                                            {{ data['5m_sell_time'] }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-left">
+                                            Sell price
+                                        </div>
+                                        <div class="col text-right">
+                                            ${{ data['5m_sell_price'] }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card CardSection">
+                            <div class="card-body">
+                                <h5 class="card-title">15m</h5>
+                                <div class="stockFigure">
+                                    {{ data.figure_15m | safe }}
+                                </div>
+                                <div class="card-text">
+                                    <div class="row">
+                                        <div class="col text-left">
+                                            Buy time
+                                        </div>
+                                        <div class="col text-right">
+                                            {{ data['15m_buy_time'] }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-left">
+                                            Buy price
+                                        </div>
+                                        <div class="col text-right">
+                                            ${{ data['15m_buy_price'] }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-left">
+                                            Sell time
+                                        </div>
+                                        <div class="col text-right">
+                                            {{ data['15m_sell_time'] }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-left">
+                                            Sell price
+                                        </div>
+                                        <div class="col text-right">
+                                            ${{ data['15m_sell_price'] }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card CardSection">
+                            <div class="card-body">
+                                <h5 class="card-title">30m</h5>
+                                <div class="stockFigure">
+                                    {{ data.figure_30m | safe }}
+                                </div>
+                                <div class="card-text">
+                                    <div class="row">
+                                        <div class="col text-left">
+                                            Buy time
+                                        </div>
+                                        <div class="col text-right">
+                                            {{ data['30m_buy_time'] }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-left">
+                                            Buy price
+                                        </div>
+                                        <div class="col text-right">
+                                            ${{ data['30m_buy_price'] }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-left">
+                                            Sell time
+                                        </div>
+                                        <div class="col text-right">
+                                            {{ data['30m_sell_time'] }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-left">
+                                            Sell price
+                                        </div>
+                                        <div class="col text-right">
+                                            ${{ data['30m_sell_price'] }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card CardSection">
+                            <div class="card-body">
+                                <h5 class="card-title">1h</h5>
+                                <div class="stockFigure">
+                                    {{ data.figure_1h | safe }}
+                                </div>
+                                <div class="card-text">
+                                    <div class="row">
+                                        <div class="col text-left">
+                                            Buy time
+                                        </div>
+                                        <div class="col text-right">
+                                            {{ data['1h_buy_time'] }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-left">
+                                            Buy price
+                                        </div>
+                                        <div class="col text-right">
+                                            ${{ data['1h_buy_price'] }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-left">
+                                            Sell time
+                                        </div>
+                                        <div class="col text-right">
+                                            {{ data['1h_sell_time'] }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-left">
+                                            Sell price
+                                        </div>
+                                        <div class="col text-right">
+                                            ${{ data['1h_sell_price'] }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card CardSection">
+                            <div class="card-body">
+                                <h5 class="card-title">1d</h5>
+                                <div class="stockFigure">
+                                    {{ data.figure_1d | safe }}
+                                </div>
+                                <div class="card-text">
+                                    <div class="row">
+                                        <div class="col text-left">
+                                            Buy time
+                                        </div>
+                                        <div class="col text-right">
+                                            {{ data['1d_buy_time'] }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-left">
+                                            Buy price
+                                        </div>
+                                        <div class="col text-right">
+                                            ${{ data['1d_buy_price'] }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-left">
+                                            Sell time
+                                        </div>
+                                        <div class="col text-right">
+                                            {{ data['1d_sell_time'] }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-left">
+                                            Sell price
+                                        </div>
+                                        <div class="col text-right">
+                                            ${{ data['1d_sell_price'] }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+<script>
+    setDateCurrentDate('trade_date');
+</script>
+</body>
+</html>
+

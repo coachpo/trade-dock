@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>All Trading Strategy Backtest</title>
+    <meta charset="utf-8">
+    <link rel="icon" type="image/x-icon" href="../static/images/stock-svgrepo-com.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="../static/stock.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/stock_style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <style>
+        .backtest-button {
+            border: none;
+            background: #0055cc;
+        }
+
+        .col-6 {
+            padding: 0 1rem 0 0;
+        }
+
+        .form-control {
+            margin: 0;
+            padding: 0.15rem;
+            border: none;
+        }
+
+        .form-group {
+            padding: 0;
+            margin: 0;
+        }
+
+        .text-muted {
+            margin: 0.25rem 0 0 0;
+            padding: 0;
+        }
+
+        .required:after {
+            content: " *";
+            color: #ff2f92;
+        }
+
+        #backtest-figure {
+            border-radius: 10px;
+            background: linear-gradient(to right top, #0055cc, #ff2f92);
+        }
+    </style>
+</head>
+<body>
+<main>
+    <div class="container">
+        <h2 class="mt-4">All Trading Strategy Backtest</h2>
+        <form id="tradingStrategyBacktest" method="POST" action="/allTradingStrategy">
+            <div class="row">
+                <div class="col-1 d-flex justify-content-center">
+                    <h2 class="mt-2">➊</h2>
+                </div>
+                <div class="col-11 d-flex align-items-center">
+                    <h6 class="mb-0">
+                        Select a trading strategy and configure general parameters<br>
+                        選擇交易策略並配置通用參數
+                    </h6>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 d-flex justify-content-center"></div>
+                <div class="col-11">
+                    <div class="form-group d-flex justify-content-between">
+                        <div class="col-6">
+                            <label for="ticker" class="form-text text-muted required">Ticker</label>
+                            <input id="ticker" name="ticker" type="text" class="form-control" style="text-align: center;">
+                        </div>
+                        <div class="col-6">
+                            <label for="strategy" class="form-text text-muted required">Trading strategy</label>
+                            <select id="strategy" name='strategy' class="form-control" style="text-align: center;">
+                                <option value=""></option>
+                                <option value="grid">Grid</option>
+                                <option value="macd">MACD</option>
+                                <option value="twap">TWAP</option>
+                                <option value="vwap">VWAP</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group d-flex justify-content-between">
+                        <div class="col-6">
+                            <label for="interval" class="form-text text-muted">Interval</label>
+                            <select id="interval" name="interval" class="form-control" style="text-align: right;">
+                                <option value="1m">1m</option>
+                                <option value="5m">5m</option>
+                                <option value="15m">15m</option>
+                                <option value="30m">30m</option>
+                                <option value="1h">1h</option>
+                                <option value="1d">1d</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label for="cash" class="form-text text-muted">Cash on hand</label>
+                            <input type="number" step="0.01" class="form-control" id="cash" name="cash" value="10000.00" style="text-align: right;">
+                        </div>
+                    </div>
+                    <div class="form-group d-flex justify-content-between">
+                        <div class="col-6">
+                            <label for="date_start" class="form-text text-muted">Backtest from</label>
+                            <input type="date" class="form-control" id="date_start" name="date_start" style="text-align: right;">
+                        </div>
+                        <div class="col-6">
+                            <label for="date_end" class="form-text text-muted">to</label>
+                            <input type="date" class="form-control" id="date_end" name="date_end" style="text-align: right;">
+                        </div>
+                    </div>
+                    <div class="form-group d-flex justify-content-between">
+                        <div class="col-6">
+                            <label for="holding" class="form-text text-muted">Current holding</label>
+                            <input type="number" min="0" step="1" class="form-control" id="holding" name="holding" value="50" style="text-align: right;">
+                        </div>
+                        <div class="col-6">
+                            <label for="quantity" class="form-text text-muted">Quantity</label>
+                            <input id="quantity" name="quantity" type="number" min="1" step="1" class="form-control" value="10" style="text-align: right;">
+                        </div>
+                    </div>
+                    <div class="form-group d-flex justify-content-between">
+                        <div class="col-6">
+                            <label for="holding_min" class="form-text text-muted">Holding scale from</label>
+                            <input type="number" min="0" step="1" class="form-control" id="holding_min" name="holding_min" value="0" style="text-align: right;">
+                        </div>
+                        <div class="col-6">
+                            <label for="holding_max" class="form-text text-muted">to</label>
+                            <input type="number" min="1" step="1" class="form-control" id="holding_max" name="holding_max" value="100" style="text-align: right;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 d-flex justify-content-center">
+                    <h2 class="mt-2">➋</h2>
+                </div>
+                <div class="col-11 d-flex align-items-center">
+                    <h6 class="mb-0">
+                        Configure the strategy parameters<br>
+                        配置策略參數
+                    </h6>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 d-flex justify-content-center"></div>
+                <div id="formContainer" class="col-11">
+                    <div class="form-group">
+                        <div class="form-group d-flex justify-content-between">
+                            <div id="grid_price_benchmark" class="col-6">
+                                <label for="price_benchmark" class="form-text text-muted">Benchmark price</label>
+                                <input id="price_benchmark" name="price_benchmark" type="number" step="0.01" class="form-control" value="1.00" style="text-align: right;">
+                            </div>
+                        </div>
+                        <div class="form-group d-flex justify-content-between">
+                            <div id="grid_price_floor" class="col-6">
+                                <label for="price_floor" class="form-text text-muted">Trigger price min</label>
+                                <input id="price_floor" name="price_floor" type="number" step="0.01" class="form-control" value="1.00" style="text-align: right;">
+                            </div>
+                            <div id="grid_price_ceiling" class="col-6">
+                                <label for="price_ceiling" class="form-text text-muted">Trigger price max</label>
+                                <input id="price_ceiling" name="price_ceiling" type="number" step="0.01" class="form-control" value="1000.00" style="text-align: right;">
+                            </div>
+                        </div>
+                        <div class="form-group d-flex justify-content-between">
+                            <div id="grid_rise" class="col-6">
+                                <label for="rise" class="form-text text-muted">Rise %</label>
+                                <input id="rise" name="rise" type="number" step="0.01" min="0.5" max="5" class="form-control" value="1.00" style="text-align: right;">
+                            </div>
+                            <div id="grid_fall" class="col-6">
+                                <label for="fall" class="form-text text-muted">Fall %</label>
+                                <input id="fall" name="fall" type="number" step="0.01" min="0.5" max="5" class="form-control" value="0.50" style="text-align: right;">
+                            </div>
+                        </div>
+                        <div class="form-group d-flex justify-content-between">
+                            <div id="macd_crsi_lower" class="col-6">
+                                <label for="crsi_lower" class="form-text text-muted">Buy when CRSI lower than</label>
+                                <input id="crsi_lower" name="crsi_lower" type="number" step="0.01" class="form-control" value="40.00" style="text-align: right;">
+                            </div>
+                            <div id="macd_crsi_upper" class="col-6">
+                                <label for="crsi_upper" class="form-text text-muted">and sell when higher than</label>
+                                <input id="crsi_upper" name="crsi_upper" type="number" step="0.01" class="form-control" value="60.00" style="text-align: right;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 d-flex justify-content-center">
+                    <h2 class="mt-2">➌</h2>
+                </div>
+                <div class="col-11 d-flex align-items-center">
+                    <h6 class="mb-0">
+                        Yield curve<br>
+                        回測收益曲線
+                    </h6>
+                    <div class="col d-flex justify-content-end align-items-center">
+                        <button type="submit" id="backtest" name="backtest" class="btn btn-primary backtest-button">
+                            Backtest
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 d-flex justify-content-center"></div>
+                <div id="result" class="col-11"></div>
+            </div>
+            <div class="row">
+                <div class="col-1 d-flex justify-content-center"></div>
+                <div class="col-11">
+                    <div id="backtest-figure"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 d-flex justify-content-center">
+                    <h2 class="mt-2">➍</h2>
+                </div>
+                <div class="col-11 d-flex align-items-center">
+                    <h6 class="mb-0">
+                        Review the trading details<br>
+                        檢視交易明細
+                    </h6>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 d-flex justify-content-center"></div>
+                <div class="col-11">
+                    <table id="trade-history" class="table table-responsive table-hover table-sm">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>Datetime</th>
+                            <th>Total Asset<br>Cash</th>
+                            <th>Price</th>
+                            <th>Direction<br>Quantity</th>
+                            <th>Holding</th>
+                            <th>Commission</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for row in data %}
+                        <tr>
+                            {% for col in row %}
+                            <td>{{ col }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+<script>
+    document.getElementById('interval').addEventListener('change', updateDatesFromInterval);
+    updateDatesFromInterval();
+
+    window.onload = function () {
+        displayFields();
+        document.getElementById('strategy').addEventListener('change', displayFields);
+    }
+
+    function displayFields() {
+        let strategy = document.getElementById('strategy').value;
+
+        let fields = ['grid_price_benchmark', 'grid_price_floor', 'grid_price_ceiling', 'grid_rise', 'grid_fall', 'macd_crsi_lower', 'macd_crsi_upper'];
+        fields.forEach(field => document.getElementById(field).style.display = 'none');
+
+        switch (strategy) {
+            case 'grid':
+                document.getElementById('grid_price_benchmark').style.display = 'block';
+                document.getElementById('grid_price_floor').style.display = 'block';
+                document.getElementById('grid_price_ceiling').style.display = 'block';
+                document.getElementById('grid_rise').style.display = 'block';
+                document.getElementById('grid_fall').style.display = 'block';
+                break;
+            case 'macd':
+                document.getElementById('macd_crsi_lower').style.display = 'block';
+                document.getElementById('macd_crsi_upper').style.display = 'block';
+                break;
+        }
+    }
+
+    document.getElementById('tradingStrategyBacktest').addEventListener('submit', function (event) {
+
+        event.preventDefault();
+
+        // Form validation
+        let ticker = document.getElementById('ticker').value;
+        let strategy = document.getElementById('strategy').value;
+        let price_benchmark = document.getElementById('price_benchmark').value;
+        let price_floor = document.getElementById('price_floor').value;
+        let price_ceiling = document.getElementById('price_ceiling').value;
+        let rise = document.getElementById('rise').value;
+        let fall = document.getElementById('fall').value;
+        let quantity = document.getElementById('quantity').value;
+        let holding = document.getElementById('holding').value;
+        let holding_min = document.getElementById('holding_min').value;
+        let holding_max = document.getElementById('holding_max').value;
+        let date_start = document.getElementById('date_start').value;
+        let date_end = document.getElementById('date_end').value;
+        let cash = document.getElementById('cash').value;
+
+        if (!ticker || !strategy || !date_start || !date_end) {
+            window.alert("Please make sure the Ticker and Trading strategy fields are not blank.");
+            return;
+        }
+
+        let formData = new FormData(event.target);
+        fetch('/allTradingStrategy', {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+            if (!response.ok) {
+                window.alert("Apologies for the inconvenience.\nPlease adjust the backtest duration. For instance, if you've selected a 1m interval, the date range should not exceed seven days.");
+                throw new Error('HTTP status ' + response.status);
+            }
+            return response.text();
+        }).then(data => {
+            let [svgData, tradeHistoryJson] = data.split('`');
+
+            // image
+            document.getElementById('backtest-figure').innerHTML = '';
+            let img = document.createElement('img');
+            img.src = 'data:image/svg+xml;base64,' + svgData;
+            img.classList.add('img-fluid');
+            document.getElementById('backtest-figure').appendChild(img);
+
+            // result and table
+            let tradeHistory = JSON.parse(tradeHistoryJson);
+
+            if (tradeHistory.length > 0) {
+                let firstRow = tradeHistory[0];
+                let lastRow = tradeHistory[tradeHistory.length - 1];
+                let initialAsset = parseFloat(firstRow.total_asset);
+                let latestAsset = parseFloat(lastRow.total_asset);
+                let initialPrice = parseFloat(firstRow.price);
+                let latestPrice = parseFloat(lastRow.price);
+
+                let yieldAsset = (latestAsset - initialAsset) * 100 / initialAsset;
+                let yieldPrice = (latestPrice - initialPrice) * 100 / initialPrice;
+
+                let noActionAsset = parseFloat(firstRow.cash + latestPrice * firstRow.holding);
+                let yieldNoAction = (noActionAsset - initialAsset) * 100 / initialAsset;
+
+                document.getElementById('result').innerHTML = `
+                    <table class="table table-responsive table-hover table-sm">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>Asset<br>If hold still</th>
+                            <th>Asset<br>Strategy</th>
+                            <th>Price<br>If all in</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Initial</td>
+                                <td>$${initialAsset.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                                <td>$${initialAsset.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                                <td>$${initialPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td>Last</td>
+                                <td>$${noActionAsset.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                                <td>$${latestAsset.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                                <td>$${latestPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td>Yield</td>
+                                <td>${yieldNoAction.toFixed(2)}%</td>
+                                <td>${yieldAsset.toFixed(2)}%</td>
+                                <td>${yieldPrice.toFixed(2)}%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                `;
+            }
+
+            let table = document.getElementById('trade-history');
+            let tbody = document.querySelector('#trade-history');
+            let count = 0;
+            Array.from(tbody.rows).forEach(row => {
+                count += 1;
+                if (count > 1) {
+                    tbody.deleteRow(row.rowIndex);
+                }
+            });
+
+            count = 0
+            tradeHistory.forEach(row => {
+                let tr = document.createElement('tr');
+                count += 1
+                tr.innerHTML = `
+                    <td>${count}</td>
+                    <td>${row.datetime}</td>
+                    <td>
+                        ${parseFloat(row.total_asset).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}<br>
+                        ${parseFloat(row.cash).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                    </td>
+                    <td>${parseFloat(row.price).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                    <td>${row.direction}<br>${row.position}</td>
+                    <td>${row.holding}</td>
+                    <td>${parseFloat(row.commission).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>`;
+                table.appendChild(tr);
+            });
+        });
+    });
+</script>
+</body>
+</html>

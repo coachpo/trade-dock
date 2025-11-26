@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Thanks 感谢您</title>
+    <meta charset="utf-8">
+    <link rel="icon" type="image/x-icon" href="../static/images/tick-circle-svgrepo-com.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="../static/stock.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/stock_style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css">
+    <link rel="icon" type="image/svg+xml" href="/images/message-2-svgrepo-com.svg"/>
+    <style>
+        .CardSection {
+            border: none;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <div class="container">
+        <div class="">
+            <h2 class="mt-4">Thanks for your support<br>谢谢您的慷慨</h2>
+            <p class="lead">
+                Innovation distinguishes between a leader and a follower.<br>
+            </p>
+            <p>
+                <a href="https://www.zhihu.com/people/MayukoSF">
+                    <img src="{{ url_for('static', filename='images/myZhihu.svg') }}" alt="Zhihu Logo" height="20px">
+                    @松田雪球兔
+                </a><br>
+            </p>
+        </div>
+        <div class="card-deck">
+            <div class="card CardSection">
+                <img src="{{ url_for('static', filename='images/stock-svgrepo-com.svg') }}" class="card-img-top" width="48" height="48">
+                <div class="card-body">
+                    <div class="hyperlink-stock">
+                        <a href="/allTradingStrategy">
+                            <h5 class="card-title">All Trading Strategy Backtest<br>所有交易策略回測</h5>
+                        </a>
+                    </div>
+                    <p class="card-text">
+                        1. Grid 網格交易<br>
+                        2. Automatic investment 定投<br>
+                        3. MACD
+                    </p>
+                </div>
+            </div>
+            <div class="card CardSection">
+                <img src="{{ url_for('static', filename='images/align-bottom-svgrepo-com.svg') }}" class="card-img-top" width="48" height="48">
+                <div class="card-body">
+                    <div class="hyperlink-stock">
+                        <a href="/queryPrices" class="hyperlink-stock">
+                            <h5 class="card-title">Query prices<br>查詢買入時機</h5>
+                        </a>
+                    </div>
+                    <p class="card-text">Calculate the higher profit buying price based on multiple trading intervals.<br>計算獲利可能性更大的買入價格。</p>
+                </div>
+            </div>
+            <div class="card CardSection">
+                <img src="{{ url_for('static', filename='images/grid-2-svgrepo-com.svg') }}" class="card-img-top" width="48" height="48">
+                <div class="card-body">
+                    <div class="hyperlink-stock">
+                        <a href="/queryTradingview" class="hyperlink-stock">
+                            <h5 class="card-title">Query all the technical analysis<br>查詢所有技術指標</h5>
+                        </a>
+                    </div>
+                    <p class="card-text">Up to 26 technical indicators to assist in trading decisions.<br>幫助交易的 26 個技術指標。</p>
+                </div>
+            </div>
+            <div class="card CardSection">
+                <img src="{{ url_for('static', filename='images/album-2-svgrepo-com.svg') }}" class="card-img-top" alt="Test icon" width="48" height="48">
+                <div class="card-body">
+                    <div class="hyperlink-stock">
+                        <h5 class="card-title">More services<br>更多交易工具</h5>
+                    </div>
+                    <p class="card-text">
+                        <i class="fas fa-envelope blue-icon"></i>
+                        <a href="/startEmailNotification" class="hyperlink-stock">Start Email Notification</a><br>
+                        <i class="fas fa-chart-line blue-icon"></i>
+                        <a href="/longbridge-day-trade" class="hyperlink-stock">Longbridge Day Trade</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

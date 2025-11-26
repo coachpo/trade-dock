@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Tradingview Screener</title>
+    <meta charset="utf-8">
+    <link rel="icon" type="image/x-icon" href="../static/images/grid-2-svgrepo-com.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="../static/stock.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/stock_style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <style>
+        .backtest-button {
+            border: none;
+            background: #0055cc;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <div class="container">
+        <h2 class="mt-4">Trade time rating screener</h2>
+        <form id="pickTradingViewTicker" method="POST" class="form">
+            <div class="row">
+                <div class="col-1 d-flex justify-content-center">
+                    <h2 class="mt-2">➊</h2>
+                </div>
+                <div class="col-11">
+                    <h6 class="mb-0">
+                        Please pick an interval<br>
+                        請選擇交易间隔
+                    </h6>
+                    <input type="hidden" name="interval">
+                    <select id="interval" class="form-select form-control">
+                        <option value="1m">1m</option>
+                        <option value="5m">5m</option>
+                        <option value="15m">15m</option>
+                        <option value="30m">30m</option>
+                        <option value="1h">1h</option>
+                        <option value="1d">1d</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 d-flex justify-content-center">
+                    <h2 class="mt-2">➋</h2>
+                </div>
+                <div class="col-11">
+                    <h6 class="mb-0">
+                        And check a ticker below<br>
+                        選擇一個標的物
+                    </h6>
+                    <div id="checkboxTicker" class="form-check">
+                        <label><input type="checkbox" value="MSFT">MSFT</label>
+                        <label><input type="checkbox" value="NVDA">NVDA</label>
+                        <label><input type="checkbox" value="META">META</label>
+                        <label><input type="checkbox" value="TSLA">TSLA</label>
+                        <label><input type="checkbox" value="TQQQ">TQQQ</label>
+                        <label><input type="checkbox" value="SQQQ">SQQQ</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 d-flex justify-content-center"></div>
+                <div class="col-11 d-flex align-items-center">
+                    <input id="newTicker" type="text" class="form-control">
+                    <div class="col text-right">
+                        <button onclick="addTradingViewTicker()" class="btn btn-primary backtest-button" style="width: 5rem">
+                            Add
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 d-flex justify-content-center">
+                    <h2 class="mt-2">➌</h2>
+                </div>
+                <div class="col-11 d-flex align-items-center">
+                    <h6 class="mb-0">
+                        Review the parameters<br>
+                        檢視技術指標
+                    </h6>
+                    <div class="col text-right">
+                        <button type="submit" id="check_trading_view" class="btn btn-primary backtest-button" style="width: 5rem">
+                            Check
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 d-flex justify-content-center"></div>
+                <div class="col-11">
+                    <div class="table-responsive">
+                        <table id="stockScreenerRating" class="table table-striped" style="width: auto">
+                            <thead>
+                            <tr>
+                                <th>Ticker</th>
+                                <th>Latest price<br>Change</th>
+                                <th>Recommend</th>
+                                <th>Buy</th>
+                                <th>Neutral</th>
+                                <th>Sell</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for row in data %}
+                            <tr onclick="toggleDetails(event)">
+                                <td>{{ row.ticker }}</td>
+                                <td>{{ row.latest_price }}&nbsp;{{ row.latest_change }}</td>
+                                <td>{{ row.recommend }}</td>
+                                <td>{{ row.buy }}</td>
+                                <td>{{ row.neutral }}</td>
+                                <td>{{ row.sell }}</td>
+                            </tr>
+                            <tr class="hidden">
+                                <td colspan="6">
+                                    <table class="table table-sm">
+                                        <tbody>
+                                        {% for key, value in row.indicators.items() %}
+                                        <tr>
+                                            <th>{{ key }}</th>
+                                            <td>{{ value }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+<script>
+    document.getElementById('checkboxTicker').addEventListener('change', function (e) {
+        let checked = document.getElementById('checkboxTicker').querySelectorAll('input:checked');
+        if (checked.length > 5) {
+            e.target.checked = false;
+        }
+    });
+
+    document.querySelector('form').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        let interval = document.getElementById('interval').value;
+        let tickers = Array.from(document.getElementById('checkboxTicker').querySelectorAll('input:checked')).map(input => input.value);
+
+        let formData = new FormData();
+        formData.append('interval', interval);
+        tickers.forEach(ticker => formData.append('ticker', ticker));
+
+        fetch('/queryTradingview', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.text())
+            .then(data => {
+                let result = JSON.parse(data);
+
+                let table = document.getElementById('stockScreenerRating');
+                let tbody = document.querySelector('#stockScreenerRating');
+                let count = 0;
+                Array.from(tbody.rows).forEach(row => {
+                    count += 1;
+                    if (count > 1) {
+                        tbody.deleteRow(row.rowIndex);
+                    }
+                });
+
+                result.forEach(row => {
+                    let tr = document.createElement('tr');
+                    tr.innerHTML = `
+                    <td>${row.ticker}</td>
+                    <td>${row.latest_price}&nbsp;${row.latest_change}</td>
+                    <td>${row.recommend}</td>
+                    <td>${row.buy}</td>
+                    <td>${row.neutral}</td>
+                    <td>${row.sell}</td>`;
+                    table.appendChild(tr);
+
+                    let trDetails = document.createElement('tr');
+                    trDetails.className = 'hidden';
+                    let td = document.createElement('td');
+                    td.colSpan = 6;
+
+                    let tableDetails = document.createElement('table');
+                    tableDetails.className = 'table table-sm';
+                    for (let key in row.indicators) {
+                        let trIndicator = document.createElement('tr');
+                        trIndicator.innerHTML = `
+                            <th>${key}</th>
+                            <td>${row.indicators[key]}</td>`;
+                        tableDetails.appendChild(trIndicator);
+                    }
+                    td.appendChild(tableDetails);
+                    trDetails.appendChild(td);
+                    table.appendChild(trDetails);
+
+                    changeBuySignals();
+                });
+            })
+            .catch((error) => {
+
+            });
+    });
+</script>
+</body>
+</html>

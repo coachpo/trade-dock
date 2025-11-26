@@ -1,0 +1,118 @@
+form {
+}
+
+table {
+    width: fit-content;
+}
+
+table, th, td {
+}
+
+th, td {
+}
+
+th {
+    font-weight: bold;
+}
+
+tr {
+    text-align: center;
+}
+
+td {
+    text-align: right;
+}
+
+thead {
+    color: #0055cc;
+}
+
+li {
+    width: 4rem;
+    text-align: center;
+}
+
+.pagination {
+    display: inline-flex;
+}
+
+.page-item {
+}
+
+.page-link {
+    color: #0055cc;
+}
+
+.page-link:hover {
+    color: #0055cc;
+}
+
+.page-link:active, .page-link:focus {
+    color: #ffffff;
+    background-color: #0055cc;
+}
+
+.interval-selection {
+    color: #0055cc;
+}
+
+.signal {
+    font-size: 0.75rem;
+    padding: 0.10rem 0.25rem 0.10rem 0.25rem;
+    border-radius: 0.25rem;
+    color: #ffffff;
+}
+
+.strong-buy {
+    background-color: #0055cc;
+}
+
+.buy {
+    background-color: #724fcb;
+}
+
+.neutral {
+    background-color: #a844c2;
+}
+
+.sell {
+    background-color: #d138b2;
+}
+
+.strong-sell {
+    background-color: #ff2f92;
+}
+
+.hidden {
+    display: none;
+}
+
+.CardSection {
+    border: none;
+    border-radius: 25px;
+    background: #e0e0e0;
+    box-shadow: 20px 20px 60px #bebebe,
+    -20px -20px 60px #ffffff;
+}
+
+.gradient-border {
+    border: none;
+    border-bottom: 1px solid;
+    border-image-slice: 1;
+    border-image-source: linear-gradient(to left, #ff2f92, #0055cc);
+}
+
+.backtest-button {
+    border: none;
+    border-radius: 10px;
+    background: #0055cc;
+}
+
+.hyperlink-stock {
+    height: 40%;
+    color: #0055cc;
+}
+
+.blue-icon {
+    color: #0055cc;
+}

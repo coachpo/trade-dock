@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Enable email notification</title>
+    <meta charset="utf-8">
+    <link rel="icon" type="image/x-icon" href="../static/images/tick-circle-svgrepo-com.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="../static/stock.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/stock_style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+<body>
+<main>
+    <div class="container">
+        <h2 class="mt-4">Notification by email</h2>
+        <form id="startEmailNotification" method="POST" action="/startEmailNotification" class="form">
+            <div class="row">
+                <div class="col-1 d-flex justify-content-center">
+                    <h2 class="mt-2">➊</h2>
+                </div>
+                <div class="col-11">
+                    <h6 class="mb-0">
+                        Please type your email to subscribe<br>
+                        請輸入您的電子郵箱
+                    </h6>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 d-flex justify-content-center"></div>
+                <div class="col-11">
+                    <div class="form-group">
+                        <input type="email" name="email" class="form-control" id="email" aria-describedby="tickerHelp">
+                        <small id="tickerHelp" class="form-text text-muted">
+                            No human will see your email address<br>
+                            你的信息始終絕密
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 d-flex justify-content-center">
+                    <h2 class="mt-2">➋</h2>
+                </div>
+                <div class="col-11">
+                    <div class="form-group">
+                        <h6 class="mb-0">
+                            And pick an interval<br>
+                            選擇交易間隔
+                        </h6>
+                        <select class="form-control" id="interval" name="interval">
+                            <option>1m</option>
+                            <option>5m</option>
+                            <option>15m</option>
+                            <option>30m</option>
+                            <option>60m</option>
+                            <option>1d</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: right;">
+                <a type="submit" id="subscribe_email" name="subscribe_email" class="btn btn-primary backtest-button" style="background-color: #0055cc;" onclick="setIntervalAndEmail()">
+                    Subscribe
+                </a>
+            </div>
+        </form>
+    </div>
+</main>
+</body>
+</html>
